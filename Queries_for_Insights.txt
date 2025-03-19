@@ -1,0 +1,91 @@
+Here are some SQL queries you can use to extract meaningful insights from the flattened Electric Vehicle (EV) data stored in Delta Tables.
+
+Total Number of Electric Vehicles by Make
+
+SELECT Make, COUNT(*) AS Total_Vehicles
+FROM DimVehicle
+GROUP BY Make
+ORDER BY Total_Vehicles DESC;
+Insight: Identifies the most popular EV brands.
+
+Number of Electric Vehicles Registered Per Year
+
+SELECT Model_Year, COUNT(*) AS Total_Vehicles
+FROM DimVehicle
+GROUP BY Model_Year
+ORDER BY Model_Year DESC;
+Insight: Shows EV adoption trends over time.
+
+Top 10 Cities with the Highest EV Registrations
+
+SELECT City, COUNT(*) AS EV_Count
+FROM DimLocation
+GROUP BY City
+ORDER BY EV_Count DESC
+LIMIT 10;
+Insight: Determines the top cities with the highest EV adoption.
+
+Most Common Electric Vehicle Type
+
+SELECT ev_type, COUNT(*) AS Count
+FROM DimVehicle
+GROUP BY ev_type
+ORDER BY Count DESC;
+Insight: Understands whether Battery Electric Vehicles (BEV) or Plug-in Hybrid Vehicles (PHEV) are more prevalent.
+
+Distribution of EVs by Legislative District
+
+SELECT ldm.District_Name, COUNT(*) AS EV_Count
+FROM DimLocation dl
+JOIN LegislativeDistrictMapping ldm ON dl.Legislative_District_ID = ldm.Legislative_District_ID
+GROUP BY ldm.District_Name
+ORDER BY EV_Count DESC;
+Insight: Helps policymakers see which districts have the most EVs.
+
+Top 5 Counties with the Most EVs
+
+SELECT County, COUNT(*) AS EV_Count
+FROM DimLocation
+GROUP BY County
+ORDER BY EV_Count DESC
+LIMIT 5;
+Insight: Identifies counties leading in EV adoption.
+
+Average Electric Range by Vehicle Make
+
+SELECT Make, AVG(Electric_Range) AS Avg_Range
+FROM FactVehicleRegistration
+GROUP BY Make
+ORDER BY Avg_Range DESC;
+Insight: Compares the efficiency of different EV brands.
+
+Most Common Census Tract for EV Owners
+
+SELECT Census_Tract_ID, COUNT(*) AS EV_Count
+FROM DimLocation
+GROUP BY Census_Tract_ID
+ORDER BY EV_Count DESC
+LIMIT 10;
+Insight: Helps urban planners analyze EV adoption per census tract.
+
+Most Expensive EV Models Based on MSRP
+
+SELECT Make, Model, MAX(Base_MSRP) AS Max_MSRP
+FROM FactVehicleRegistration
+GROUP BY Make, Model
+ORDER BY Max_MSRP DESC
+LIMIT 10;
+Insight: Identifies premium EV models in the dataset.
+
+EV Adoption Trends Over the Years
+
+SELECT Model_Year, COUNT(*) AS EV_Count
+FROM DimVehicle
+GROUP BY Model_Year
+ORDER BY Model_Year DESC;
+Insight: Helps track how EV adoption has grown year over year.
+
+Enhancements:
+Run these queries on Databricks SQL or PySpark SQL.
+Optimize tables using partitioning (date_id, county) for faster performance.
+Visualize results using Databricks dashboards or BI tools like Power BI/Tableau.
