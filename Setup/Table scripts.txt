@@ -1,0 +1,67 @@
+table scripts:
+%sql
+CREATE TABLE IF NOT EXISTS DimVehicle (
+    VIN STRING PRIMARY KEY,
+    Model_Year INT,
+    Make STRING,
+    Model STRING,
+    ev_type STRING,
+    cafv_type STRING
+)
+USING DELTA
+LOCATION '/Provisioned/DimVehicle';
+
+
+CREATE TABLE IF NOT EXISTS dim_location (
+    owner_location_id STRING PRIMARY KEY,
+    county STRING,
+    city STRING,
+    state STRING,
+    zip_code STRING
+)
+USING DELTA
+LOCATION '/mnt/delta/dim_location';
+
+CREATE TABLE IF NOT EXISTS dim_date (
+    date_id INT PRIMARY KEY,
+    full_date DATE,
+    year INT,
+    month INT,
+    day INT
+)
+USING DELTA
+LOCATION '/mnt/delta/dim_date';
+
+CREATE TABLE IF NOT EXISTS dim_legislative_district (
+    legislative_district_id INT PRIMARY KEY,
+    district_name STRING
+)
+USING DELTA
+LOCATION '/mnt/delta/dim_legislative_district';
+
+CREATE TABLE IF NOT EXISTS dim_census_tract (
+    census_tract_id STRING PRIMARY KEY,
+    region STRING,
+    state STRING
+)
+USING DELTA
+LOCATION '/mnt/delta/dim_census_tract';
+
+CREATE TABLE IF NOT EXISTS fact_vehicle_registration (
+    registration_id STRING PRIMARY KEY,
+    date_id INT,
+    vin_id STRING,
+    owner_location_id STRING,
+    census_tract_id STRING,
+    electric_range INT,
+    base_msrp INT,
+    legislative_district_id INT,
+    registration_timestamp TIMESTAMP,
+    FOREIGN KEY (date_id) REFERENCES dim_date(date_id),
+    FOREIGN KEY (vin_id) REFERENCES dim_vehicle(vin_id),
+    FOREIGN KEY (owner_location_id) REFERENCES dim_location(owner_location_id),
+    FOREIGN KEY (census_tract_id) REFERENCES dim_census_tract(census_tract_id),
+    FOREIGN KEY (legislative_district_id) REFERENCES dim_legislative_district(legislative_district_id)
+)
+USING DELTA
+LOCATION '/mnt/delta/fact_vehicle_registration';

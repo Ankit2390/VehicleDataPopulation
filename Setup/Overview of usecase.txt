@@ -1,0 +1,28 @@
+Use Case Breakdown
+The implementation consists of two main parts:
+
+Part 1: Current Architecture (Azure-Based)
+Extract: Read the JSON file from cloud storage (ADLS Gen2).
+Transform:
+Flatten the nested JSON structure.
+Extract relevant attributes such as VIN, Make, Model, Location, Census Tract ID, Legislative District, etc..
+Perform data quality checks (e.g., missing values, duplicates).
+Implement schema evolution handling.
+Load:
+Store the data in Delta Tables to ensure ACID transactions and schema enforcement.
+Partition Fact and Dimension Tables appropriately.
+Insights & Visualization:
+Generate queries and visualizations to analyze EV adoption patterns.
+
+Part 2: Future Architecture (Snowflake Snowpark)
+Migrate the ETL pipeline from Databricks to Snowpark.
+Leverage Snowflake's cloud-native compute for processing.
+Load the data to Iceberg tables for handling schema evolution & analysis Purpose
+
+
+
+
+
+
+
+
